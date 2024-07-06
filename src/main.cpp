@@ -45,7 +45,7 @@ void setup(){
   analogRead(A2); //Read ADC2
   delay (500); // Allow ADC to settle
   float vbat=analogRead(A2); //Read ADC again
-  vbat=16*(vbat + 0.5)/(float)adcfs*adcref; //Calculate battery voltage scaled by R9 & R10
+  vbat=16*(vbat + 0.5)/(float)adcfs*adcref; //Calculate battery voltage scaled by 150k & 10k
   // Display startup screen
   MySerial.begin(9600);
   MySerial.println(F("Starting..."));
