@@ -1,8 +1,8 @@
-#define VERSION "0.02"
+#define VERSION "0.03"
 #include <Arduino.h>
 #include <Wire.h>
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 32 // OLED display height, in pixels
+//#define SCREEN_HEIGHT 32 // OLED display height, in pixels
 #define TEMPMIN -20
 #define BARGRAPH
 #define PPD 2 //pixels per degree, must be +ve integer
@@ -45,7 +45,7 @@ void setup(){
   analogRead(A2); //Read ADC2
   delay (500); // Allow ADC to settle
   float vbat=analogRead(A2); //Read ADC again
-  vbat=4.9*(vbat + 0.5)/(float)adcfs*adcref; //Calculate battery voltage scaled by R9 & R10
+  vbat=16*(vbat + 0.5)/(float)adcfs*adcref; //Calculate battery voltage scaled by R9 & R10
   // Display startup screen
   MySerial.begin(9600);
   MySerial.println(F("Starting..."));
@@ -86,12 +86,21 @@ void loop(){
     MySerial.print(temp,2);
     MySerial.println(F(" °"));
     display.clearDisplay();
+    #if SCREEN_HEIGHT==32
     display.setCursor (0,0);
     display.setTextSize(2);
     display.print(j);
     display.print(F(": "));
     display.print(temp,1);
     display.print((char)247);
+    #endif
+    #if SCREEN_HEIGHT==64
+    display.setCursor (0,5);
+    display.setTextSize(3);
+    display.print(j);
+    display.print(F(":"));
+    display.print(temp,1);
+    #endif
     
     #if defined(BARGRAPH)
     int w=(temp-TEMPMIN)*PPD;
